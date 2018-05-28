@@ -1,19 +1,25 @@
 package views;
 
 import java.awt.BorderLayout;
+
 import java.awt.EventQueue;
 
+import javax.swing.Timer;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JTextField;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class Okno extends JFrame 
 {
 
 	private JPanel contentPane;
 	private JTextField textField;
+	
+	int i;
 
 	/**
 	 * Launch the application.
@@ -41,6 +47,7 @@ public class Okno extends JFrame
 	 */
 	public Okno() 
 	{
+		i=0;
 		setIconImage(Toolkit.getDefaultToolkit().getImage(Okno.class.getResource("/resources/robot-arm.png")));
 		setTitle("Robot");
 		initElements();
@@ -70,6 +77,12 @@ public class Okno extends JFrame
 	///////////////////////////////////////////////////////////////////////////
 	public void initEvents() 
 	{
-		
-	}	
+		Timer t = new Timer(1, new ActionListener() 
+		{
+			public void actionPerformed(ActionEvent e) 
+			{
+				
+			}
+		});
+	}
 }
