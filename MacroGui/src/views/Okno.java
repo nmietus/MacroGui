@@ -19,10 +19,11 @@ import javax.swing.Timer;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import common.Mysz;
+
 import javax.swing.JTextField;
 import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import javax.swing.JLabel;
@@ -31,16 +32,18 @@ import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JButton;
 
-public class Okno extends JFrame 
+public class Okno extends JFrame
 {
 
 	private JPanel contentPane;
 	
-	int i;
-	Robot robot;
-	Point punkt;
-	Timer t1, t2, t3;
-	ArrayList<Point> lista;
+	private int i;
+	private Robot robot;
+	private Point punkt;
+	private Mysz mysz;
+	private Timer t1, t2, t3;
+	private ArrayList<Point> lista;
+	private ArrayList<Mysz> listaMyszy;
 	private JLabel lblWspdne;
 	private JLabel lblWsprzdne;
 	private JTextArea textArea;
@@ -48,6 +51,8 @@ public class Okno extends JFrame
 	private JButton btnStopR;
 	private JButton btnStartM;
 	private JButton btnStopM;
+	private JLabel lblKlawisz;
+	private JLabel lblKlawisz_1;
 
 	/**
 	 * Launch the application.
@@ -75,10 +80,12 @@ public class Okno extends JFrame
 	 */
 	public Okno() 
 	{
+		
 		i=0;
 		initElements();
 		initEvents();
 		t1.start();		//odpalenie timera który wyœwietla wspó³rzêdne myszki
+		
 	}
 	///////////////////////////////////////////////////////////////////////////
 	//DEKLARACJE I INICJALIZACJE ELEMENTÓW
@@ -114,6 +121,7 @@ public class Okno extends JFrame
 		contentPane.add(scrollPane);
 		
 		textArea = new JTextArea();
+		textArea.setEnabled(false);
 		scrollPane.setViewportView(textArea);
 		textArea.setLineWrap(true);
 		
@@ -140,6 +148,14 @@ public class Okno extends JFrame
 		btnStopM.setMargin(new Insets(0, 0, 0, 0));
 		btnStopM.setBounds(336, 124, 57, 23);
 		contentPane.add(btnStopM);
+		
+		lblKlawisz = new JLabel("Klawisz:");
+		lblKlawisz.setBounds(248, 212, 83, 14);
+		contentPane.add(lblKlawisz);
+		
+		lblKlawisz_1 = new JLabel("klawisz");
+		lblKlawisz_1.setBounds(248, 237, 83, 14);
+		contentPane.add(lblKlawisz_1);
 	}
 	
 	///////////////////////////////////////////////////////////////////////////
@@ -153,8 +169,11 @@ public class Okno extends JFrame
 			{
 				
 				punkt = MouseInfo.getPointerInfo().getLocation();
-				lblWspdne.setText(punkt.getX()+" : "+punkt.getY());
+				//mysz = new Mysz();
+			
 				
+				lblWspdne.setText(punkt.getX()+" : "+punkt.getY());
+				//lblKlawisz_1.setText(MouseEvent.BUTTON1);
 				//textArea.setText(textArea.getText()+"\n"+punkt.getX()+" : "+punkt.getY());
 			}
 		});
@@ -164,10 +183,12 @@ public class Okno extends JFrame
 			public void actionPerformed(ActionEvent e) 
 			{
 				
+				
 				textArea.setText(textArea.getText()+"\n"+punkt.getX()+" : "+punkt.getY());
 				lista.add(punkt);
 			}
 		});
+		
 		
 		t3 = new Timer(1, new ActionListener() 		//timer odpowiadaj¹cy za odtwarzanie
 		{
@@ -213,6 +234,14 @@ public class Okno extends JFrame
 				t3.stop();
 			}
 		});
+		
+		btnStartR.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent arg0) {
+				char temp = arg0.getKeyChar();
+				lblKlawisz_1.setText(lblKlawisz_1.getText()+temp);
+			}
+		});
 	}
-	
+
 }
