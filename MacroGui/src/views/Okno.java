@@ -46,13 +46,14 @@ public class Okno extends JFrame
 	private ArrayList<Mysz> listaMyszy;
 	private JLabel lblWspdne;
 	private JLabel lblWsprzdne;
-	private JTextArea textArea;
+	private JTextArea txtRecord;
 	private JButton btnStartR;
 	private JButton btnStopR;
 	private JButton btnStartM;
 	private JButton btnStopM;
 	private JLabel lblKlawisz;
 	private JLabel lblKlawisz_1;
+	private JTextArea txtPlay;
 
 	/**
 	 * Launch the application.
@@ -101,6 +102,9 @@ public class Okno extends JFrame
 		
 		lista = new ArrayList<>();
 		
+		listaMyszy = new ArrayList<>();
+		mysz = new Mysz();
+		
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
@@ -116,14 +120,18 @@ public class Okno extends JFrame
 		lblWspdne.setBounds(341, 237, 71, 14);
 		contentPane.add(lblWspdne);
 		
-		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(24, 11, 147, 102);
-		contentPane.add(scrollPane);
+		JScrollPane scrollPaneRecord = new JScrollPane();
+		scrollPaneRecord.setBounds(24, 11, 147, 102);
+		contentPane.add(scrollPaneRecord);
 		
-		textArea = new JTextArea();
-		textArea.setEnabled(false);
-		scrollPane.setViewportView(textArea);
-		textArea.setLineWrap(true);
+		JScrollPane scrollPanePlay = new JScrollPane();
+		scrollPanePlay.setBounds(246, 12, 147, 102);
+		contentPane.add(scrollPanePlay);
+		
+		txtRecord = new JTextArea();
+		txtRecord.setEnabled(false);
+		scrollPaneRecord.setViewportView(txtRecord);
+		txtRecord.setLineWrap(true);
 		
 		lblWsprzdne = new JLabel("Wsp\u00F3\u0142rz\u0119dne:");
 		lblWsprzdne.setBounds(341, 212, 83, 14);
@@ -156,6 +164,13 @@ public class Okno extends JFrame
 		lblKlawisz_1 = new JLabel("klawisz");
 		lblKlawisz_1.setBounds(248, 237, 83, 14);
 		contentPane.add(lblKlawisz_1);
+		
+		txtPlay = new JTextArea();
+		txtPlay.setLineWrap(true);
+		txtPlay.setEnabled(false);
+		txtPlay.setBounds(246, 12, 145, 100);
+		scrollPanePlay.setViewportView(txtPlay);
+		
 	}
 	
 	///////////////////////////////////////////////////////////////////////////
@@ -168,9 +183,7 @@ public class Okno extends JFrame
 			public void actionPerformed(ActionEvent e) 
 			{
 				
-				punkt = MouseInfo.getPointerInfo().getLocation();
-				//mysz = new Mysz();
-			
+				punkt = MouseInfo.getPointerInfo().getLocation();			
 				
 				lblWspdne.setText(punkt.getX()+" : "+punkt.getY());
 				//lblKlawisz_1.setText(MouseEvent.BUTTON1);
@@ -184,8 +197,11 @@ public class Okno extends JFrame
 			{
 				
 				
-				textArea.setText(textArea.getText()+"\n"+punkt.getX()+" : "+punkt.getY());
+				txtRecord.setText(txtRecord.getText()+"\n"+punkt.getX()+" : "+punkt.getY());
 				lista.add(punkt);
+				
+				txtPlay.setText(txtPlay.getText()+"\n"+mysz.getKlik());
+				listaMyszy.add(mysz);
 			}
 		});
 		
@@ -243,5 +259,4 @@ public class Okno extends JFrame
 			}
 		});
 	}
-
 }

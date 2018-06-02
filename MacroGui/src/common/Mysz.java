@@ -48,7 +48,7 @@ public class Mysz implements MouseListener {
 	}
 	
 	public int getKlik() {
-		return klik;
+		return this.klik;
 	}
 
 }
