@@ -7,6 +7,7 @@ package views;
 
 import java.awt.AWTException;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Robot;			//klasa Robot
 import java.awt.event.*;		//po³o¿enie myszki i inne
 
@@ -19,6 +20,7 @@ import javax.swing.Timer;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.MouseInputAdapter;
 
 import common.Mysz;
 
@@ -68,6 +70,7 @@ public class Okno extends JFrame
 				{
 					Okno frame = new Okno();
 					frame.setVisible(true);
+					
 				} catch (Exception e) 
 				{
 					e.printStackTrace();
@@ -82,6 +85,9 @@ public class Okno extends JFrame
 	public Okno() 
 	{
 		
+		
+		
+		
 		i=0;
 		initElements();
 		initEvents();
@@ -93,10 +99,11 @@ public class Okno extends JFrame
 	///////////////////////////////////////////////////////////////////////////
 	public void initElements() 
 	{
-		try {
+		try 
+		{
 			robot = new Robot();
-		} catch (AWTException e) {
-			// TODO Auto-generated catch block
+		} catch (AWTException e) 
+		{
 			e.printStackTrace();
 		}
 		
@@ -113,6 +120,7 @@ public class Okno extends JFrame
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
+		//contentPane.setBackground(new Color(30,190,250,1));
 		setIconImage(Toolkit.getDefaultToolkit().getImage(Okno.class.getResource("/resources/robot-arm.png")));
 		setTitle("Robot");
 		
@@ -178,6 +186,7 @@ public class Okno extends JFrame
 	///////////////////////////////////////////////////////////////////////////
 	public void initEvents() 
 	{
+		
 		t1 = new Timer(1, new ActionListener() 		//ten timer odpowiada za wyœwietlanie wspó³rzêdnych w prawym dolnym rogu
 		{
 			public void actionPerformed(ActionEvent e) 
@@ -191,11 +200,12 @@ public class Okno extends JFrame
 			}
 		});
 		
+
+		
 		t2 = new Timer(1, new ActionListener() 		//timer odpowiadaj¹cy za nagrywanie ruchów myszki
 		{
 			public void actionPerformed(ActionEvent e) 
 			{
-				
 				
 				txtRecord.setText(txtRecord.getText()+"\n"+punkt.getX()+" : "+punkt.getY());
 				lista.add(punkt);
@@ -212,6 +222,18 @@ public class Okno extends JFrame
 			{
 				//lista.get(i)
 				robot.mouseMove((int)lista.get(i).getX(), (int)lista.get(i).getY());
+				
+				if(i>0 && listaMyszy.get(i).getKlik()==1 && listaMyszy.get(i-1).getKlik()==0) {
+					robot.mousePress(MouseEvent.BUTTON1_MASK);
+					System.out.println("Mysz wciœniêta");
+				}
+					
+				if(i>0 && listaMyszy.get(i).getKlik()==0 && listaMyszy.get(i-1).getKlik()==1) 
+					{
+						robot.mouseRelease(MouseEvent.BUTTON1_MASK);
+						System.out.println("Mysz puszczona");
+					}
+				
 				i++;
 				if(i>lista.size()-1)
 				{
@@ -225,6 +247,7 @@ public class Okno extends JFrame
 		{
 			public void actionPerformed(ActionEvent arg0) 
 			{
+				System.out.println("Start nagrywania");
 				t2.start();
 			}
 		});
@@ -232,6 +255,7 @@ public class Okno extends JFrame
 		{
 			public void actionPerformed(ActionEvent arg0) 
 			{
+				System.out.println("Stop nagrywania");
 				t2.stop();
 			}
 		});
@@ -251,12 +275,21 @@ public class Okno extends JFrame
 			}
 		});
 		
-		btnStartR.addKeyListener(new KeyAdapter() {
+		contentPane.addMouseListener(new MouseAdapter() 
+		{
 			@Override
-			public void keyReleased(KeyEvent arg0) {
-				char temp = arg0.getKeyChar();
-				lblKlawisz_1.setText(lblKlawisz_1.getText()+temp);
+			public void mousePressed(MouseEvent e) 
+			{
+				mysz.changeKlik();
+				lblKlawisz_1.setText("Klawisz wciœniêty!");
+			}
+			@Override
+			public void mouseReleased(MouseEvent e) 
+			{
+				mysz.changeKlik();
+				lblKlawisz_1.setText("Klawisz puszczony");
 			}
 		});
+		
 	}
 }
